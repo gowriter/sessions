@@ -2,8 +2,8 @@ package session_test
 
 import (
 	"context"
-	"github.com/gowriter/session"
-	"github.com/gowriter/session/memstore"
+	sessions "github.com/gowriter/sessions"
+	"github.com/gowriter/sessions/memstore"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"net/http"
@@ -37,7 +37,7 @@ func TestNewSession(t *testing.T) {
 	}
 
 	t.Run("success new session", func(t *testing.T) {
-		httpSession, err := session.NewHttpSession[testType](testStore, testCookie, session.Options{
+		httpSession, err := sessions.NewHttpSession[testType](testStore, testCookie, sessions.Options{
 			GeneratorFunc: func() (string, error) {
 				return testSessionID, nil
 			},
@@ -61,7 +61,7 @@ func TestNewSession(t *testing.T) {
 	})
 
 	t.Run("success put session", func(t *testing.T) {
-		httpSession, err := session.NewHttpSession[testType](testStore, testCookie, session.Options{
+		httpSession, err := sessions.NewHttpSession[testType](testStore, testCookie, sessions.Options{
 			GeneratorFunc: func() (string, error) {
 				return "testID", nil
 			},
@@ -69,7 +69,7 @@ func TestNewSession(t *testing.T) {
 		})
 		require.NoError(t, err)
 
-		testSession := &session.Session[testType]{
+		testSession := &sessions.Session[testType]{
 			Object: &testData,
 			Cookie: &testCookie,
 		}
@@ -79,7 +79,7 @@ func TestNewSession(t *testing.T) {
 	})
 
 	t.Run("success put session", func(t *testing.T) {
-		httpSession, err := session.NewHttpSession[testType](testStore, testCookie, session.Options{
+		httpSession, err := sessions.NewHttpSession[testType](testStore, testCookie, sessions.Options{
 			GeneratorFunc: func() (string, error) {
 				return "testID", nil
 			},
@@ -87,7 +87,7 @@ func TestNewSession(t *testing.T) {
 		})
 		require.NoError(t, err)
 
-		wantSession := &session.Session[testType]{
+		wantSession := &sessions.Session[testType]{
 			Object: &testData,
 			Cookie: &testCookie,
 		}
@@ -99,7 +99,7 @@ func TestNewSession(t *testing.T) {
 	})
 
 	t.Run("success end session", func(t *testing.T) {
-		httpSession, err := session.NewHttpSession[testType](testStore, testCookie, session.Options{
+		httpSession, err := sessions.NewHttpSession[testType](testStore, testCookie, sessions.Options{
 			GeneratorFunc: func() (string, error) {
 				return "testID", nil
 			},
@@ -107,7 +107,7 @@ func TestNewSession(t *testing.T) {
 		})
 		require.NoError(t, err)
 
-		testSession := &session.Session[testType]{
+		testSession := &sessions.Session[testType]{
 			Object: &testData,
 			Cookie: &testCookie,
 		}

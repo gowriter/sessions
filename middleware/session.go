@@ -2,7 +2,6 @@ package middleware
 
 import (
 	"context"
-	"github.com/gowriter/session"
 	"net/http"
 
 	"github.com/sirupsen/logrus"

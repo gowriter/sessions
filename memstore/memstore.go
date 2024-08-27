@@ -3,14 +3,14 @@ package memstore
 import (
 	"context"
 	"encoding/json"
-	"github.com/gowriter/session"
+	sessions "github.com/gowriter/sessions"
 )
 
 type MemoryStore struct {
 	Store map[string]any
 }
 
-func NewMemoryStore() session.Store {
+func NewMemoryStore() sessions.Store {
 	return &MemoryStore{Store: map[string]any{}}
 }
 
@@ -22,7 +22,7 @@ func (m *MemoryStore) New(_ context.Context, sessionID string, data any) error {
 func (m *MemoryStore) Get(_ context.Context, sessionID string) (json.RawMessage, error) {
 	data, ok := m.Store[sessionID]
 	if !ok {
-		return nil, session.ErrNotFound
+		return nil, sessions.ErrNotFound
 	}
 
 	b, err := json.Marshal(data)

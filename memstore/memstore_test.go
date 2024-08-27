@@ -3,7 +3,7 @@ package memstore
 import (
 	"context"
 	"encoding/json"
-	"github.com/gowriter/session"
+	sessions "github.com/gowriter/sessions"
 	"github.com/stretchr/testify/assert"
 	"reflect"
 	"testing"
@@ -18,7 +18,7 @@ type TestType struct {
 
 func TestMemoryStore_Get(t *testing.T) {
 	type fields struct {
-		Store session.Store
+		Store sessions.Store
 	}
 	type args struct {
 		ctx       context.Context
@@ -43,7 +43,7 @@ func TestMemoryStore_Get(t *testing.T) {
 		wantErr     error
 	}{
 		{
-			name: "session exists",
+			name: "sessions exists",
 			fields: fields{
 				Store: NewMemoryStore(),
 			},
@@ -54,7 +54,7 @@ func TestMemoryStore_Get(t *testing.T) {
 			want: testSessionJSON,
 		},
 		{
-			name: "error session not exists",
+			name: "error sessions not exists",
 			fields: fields{
 				Store: NewMemoryStore(),
 			},
@@ -62,7 +62,7 @@ func TestMemoryStore_Get(t *testing.T) {
 				ctx:       ctx,
 				sessionID: "wrong_test_session_id",
 			},
-			wantErr: session.ErrNotFound,
+			wantErr: sessions.ErrNotFound,
 		},
 	}
 	for _, tt := range tests {
@@ -83,7 +83,7 @@ func TestMemoryStore_Get(t *testing.T) {
 
 func TestMemoryStore_Put(t *testing.T) {
 	type fields struct {
-		Store session.Store
+		Store sessions.Store
 	}
 	type args struct {
 		ctx         context.Context
@@ -125,7 +125,7 @@ func TestMemoryStore_Put(t *testing.T) {
 				t.Errorf("Put() error = %v, wantErr %v", err, tt.wantErr)
 			}
 			if tt.wantErr {
-				assert.EqualError(t, err, session.ErrNotFound.Error())
+				assert.EqualError(t, err, sessions.ErrNotFound.Error())
 			}
 			assert.NoError(t, err)
 			got, ok := s.Store[tt.args.sessionID]
@@ -137,7 +137,7 @@ func TestMemoryStore_Put(t *testing.T) {
 
 func TestMemoryStore_End(t *testing.T) {
 	type fields struct {
-		Store session.Store
+		Store sessions.Store
 	}
 	type args struct {
 		ctx       context.Context
@@ -154,7 +154,7 @@ func TestMemoryStore_End(t *testing.T) {
 		wantErr     bool
 	}{
 		{
-			name: "success end session",
+			name: "success end sessions",
 			fields: fields{
 				Store: NewMemoryStore(),
 			},
@@ -174,7 +174,7 @@ func TestMemoryStore_End(t *testing.T) {
 				t.Errorf("End() error = %v, wantErr %v", err, tt.wantErr)
 			}
 			if tt.wantErr {
-				assert.EqualError(t, err, session.ErrNotFound.Error())
+				assert.EqualError(t, err, sessions.ErrNotFound.Error())
 			}
 			assert.NoError(t, err)
 			_, ok := s.Store[tt.args.sessionID]
@@ -185,7 +185,7 @@ func TestMemoryStore_End(t *testing.T) {
 
 func TestMemoryStore_New(t *testing.T) {
 	type fields struct {
-		Store session.Store
+		Store sessions.Store
 	}
 	type args struct {
 		ctx         context.Context
@@ -203,7 +203,7 @@ func TestMemoryStore_New(t *testing.T) {
 		wantErr     bool
 	}{
 		{
-			name: "success new session",
+			name: "success new sessions",
 			fields: fields{
 				Store: NewMemoryStore(),
 			},
@@ -226,7 +226,7 @@ func TestMemoryStore_New(t *testing.T) {
 				t.Errorf("New() error = %v, wantErr %v", err, tt.wantErr)
 			}
 			if tt.wantErr {
-				assert.EqualError(t, err, session.ErrNotFound.Error())
+				assert.EqualError(t, err, sessions.ErrNotFound.Error())
 			}
 			assert.NoError(t, err)
 			got, ok := s.Store[tt.args.sessionID]
