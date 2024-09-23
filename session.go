@@ -5,14 +5,21 @@ import (
 	"crypto/rand"
 	"encoding/base64"
 	"encoding/json"
-	"github.com/google/uuid"
 	"io"
 	"net/http"
 	"sync"
 	"time"
 
+	"github.com/google/uuid"
 	"github.com/pkg/errors"
 )
+
+type HttpSessionInterface[T any] interface {
+	NewSession(ctx context.Context, t T) (*Session[T], error)
+	GetSession(ctx context.Context, session *Session[T]) (*Session[T], error)
+	PutSession(ctx context.Context, session *Session[T]) error
+	EndSession(ctx context.Context, session *Session[T]) (*Session[T], error)
+}
 
 type HttpSession[T any] struct {
 	lock       sync.Mutex
@@ -79,13 +86,13 @@ func (service *HttpSession[T]) GetSession(ctx context.Context, session *Session[
 		return nil, errors.Wrap(err, "failed to get Data from session")
 	}
 
-	obj := new(T)
-	err = json.Unmarshal(sessionData, obj)
+	t := new(T)
+	err = json.Unmarshal(sessionData, t)
 	if err != nil {
 		return nil, errors.Wrap(err, "failed to unmarshal session Data")
 	}
 
-	session.Object = obj
+	session.Object = t
 	return session, nil
 }
 
